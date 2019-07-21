@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView encryptText;
     private TextView decryptText;
 
-    final String original = "1234567890";
+    final String original = "1234567890abcdef";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
