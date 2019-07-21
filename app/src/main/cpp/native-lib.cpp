@@ -53,8 +53,9 @@ jstring encryptDecrypt(JNIEnv *env,
     int num = 0;
     AES_cfb128_encrypt(in, out, paddedLength, aes_key, iv, &num, enc);
     logChar("开始cfb128加密完成");
-    char *result = (char *)malloc((paddedLength  / 2)* sizeof(char));
-    convertUnCharToStr(result,out,paddedLength);
+    char *result = (char *)malloc((paddedLength  * 2)* sizeof(char));
+//    convertUnCharToStr(result,out,paddedLength);
+    convert_hex(out,paddedLength,result);
 //    free(&out);
     return env->NewStringUTF(result);
 }
