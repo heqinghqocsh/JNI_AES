@@ -27,7 +27,6 @@ void convertUnCharToStr(char *out, unsigned char *UnChar, size_t ucLen) {
 static const char hex_chars[] = "0123456789abcdef";
 
 void convert_hex(unsigned char *in, size_t len, char *out) {
-    unsigned int c = 0;
     for (int i = 0; i < len; i++) {
         out += hex_chars[(in[i] >> 4) & 0x0f];
         out += hex_chars[in[i] & 0x0f];
