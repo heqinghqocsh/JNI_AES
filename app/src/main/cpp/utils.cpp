@@ -34,3 +34,23 @@ void convert_hex(unsigned char *in, size_t len, char *out) {
     }
     out[i * 2] = '\0';
 }
+
+int hexIndex(char c) {
+    const int len = (int) strlen(hex_chars);
+    for (int i = 0; i < len; ++i) {
+        if (hex_chars[i] == c) {
+            return i;
+        }
+    }
+}
+
+void hexConvertToUnsignedChar(unsigned char *in, size_t len, unsigned char *out) {
+    int i = 0;
+    for (i = 0; i < len; i++) {
+        out[i] = (hexIndex(in[i * 2]) << 4 & 0xf0) |
+                 (hexIndex(in[i * 2 + 1]) & 0x0f);
+    }
+    out[i] = '\0';
+}
+
+
