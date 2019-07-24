@@ -15,7 +15,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView encryptText;
     private TextView decryptText;
 
-    final String original = "1";
+    final String original = "abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
+            "234567890,./最棒dfadfjlasjdflsajdofgaskdgajfla464a53s1df3a1s97r8917403a(&*&*@#$%$^";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
