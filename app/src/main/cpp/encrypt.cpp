@@ -8,6 +8,7 @@
 #include "modes.h"
 #include <android/log.h>
 #include "utils.h"
+#include "base64.h"
 
 unsigned char *padding_buf(const char *buf, size_t size, size_t *final_size) {
     unsigned char *ret = NULL;
@@ -82,4 +83,24 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_decrypt(
     const int pad = (int)out[outPaddedLength - 1];
     out[outPaddedLength - pad] = '\0';
     return env->NewStringUTF((char *) out);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_base64Encode(
+        JNIEnv *env,
+        jobject /* this */, jstring plainText) {
+    const char *inChars = (env->GetStringUTFChars(plainText, JNI_FALSE));
+    char *out = b64_encode((const unsigned char *)inChars,strlen(inChars));
+    env->ReleaseStringUTFChars(plainText, inChars);
+    return env->NewStringUTF(out);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_base64Decode(
+        JNIEnv *env,
+        jobject /* this */, jstring encodedText) {
+    const char *inChars = (env->GetStringUTFChars(encodedText, JNI_FALSE));
+    unsigned char *out = b64_decode((const unsigned char *)inChars,strlen(inChars));
+    env->ReleaseStringUTFChars(encodedText, inChars);
+    return env->NewStringUTF((char *)out);
 }

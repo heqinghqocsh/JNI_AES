@@ -12,8 +12,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private TextView originalText;
-    private TextView encryptText;
     private TextView decryptText;
+
+    private TextView base64Text;
+    private TextView encodeText;
+    private TextView decodeText;
 
     final String original = "abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
             "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
@@ -30,13 +33,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         originalText = findViewById(R.id.original_text);
-        encryptText = findViewById(R.id.encrypt_text);
         decryptText = findViewById(R.id.decrypt_text);
 
-        originalText.setText("原文：\n"+original);
-        final String cipherText = encrypt(original);
-        encryptText.setText("密文：\n"+cipherText);
-        decryptText.setText("解密：\n"+decrypt(cipherText));
+        base64Text = findViewById(R.id.base64_text);
+        encodeText = findViewById(R.id.encode_text);
+        decodeText = findViewById(R.id.decode_text);
+
+        final StringBuilder plainText = new StringBuilder(10000);
+        for (int i = 0;i<200;i++){
+            plainText.append(original);
+        }
+
+        originalText.setText("原文长度：\n"+plainText.length());
+        final String cipherText = encrypt(plainText.toString());
+//        encryptText.setText("密文：\n"+cipherText);
+        final String tmp = decrypt(cipherText);
+        if (tmp.equals(plainText.toString())){
+            decryptText.setText("加解密成功：\n");
+        }else {
+            decryptText.setText("加解密失败：\n");
+        }
+
+        final String base64 = "http://www漢字12汉字3asdf456中文";
+
+        base64Text.setText(base64);
+        final String encodeStr = base64Encode(base64);
+        encodeText.setText(encodeStr);
+        decodeText.setText(base64Decode(encodeStr));
     }
 
     /**
@@ -46,4 +69,8 @@ public class MainActivity extends AppCompatActivity {
     public native String encrypt(String plainText);
 
     public native String decrypt(String cipherText);
+
+    public native String base64Encode(String cipherText);
+
+    public native String base64Decode(String cipherText);
 }
