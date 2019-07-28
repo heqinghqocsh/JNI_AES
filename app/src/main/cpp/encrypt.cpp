@@ -39,9 +39,9 @@ unsigned char *getIv() {
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_encrypt(
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
         JNIEnv *env,
-        jobject /* this */, jstring plainText) {
+        jclass /* this */, jstring plainText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
     AES_set_encrypt_key(password, 128, aes_key);
 
@@ -62,9 +62,9 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_encrypt(
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_decrypt(
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
         JNIEnv *env,
-        jobject /* this */, jstring encryptText) {
+        jclass /* this */, jstring encryptText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
     AES_set_encrypt_key(password, 128, aes_key);
 
@@ -86,19 +86,19 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_decrypt(
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_base64Encode(
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_base64Encode(
         JNIEnv *env,
-        jobject /* this */, jstring plainText) {
+        jclass /* this */, jstring plainText,jboolean doNewLine) {
     const char *inChars = (env->GetStringUTFChars(plainText, JNI_FALSE));
-    char *out = b64_encode((const unsigned char *)inChars,strlen(inChars));
+    const char *out = b64_encode((const unsigned char *)inChars,strlen(inChars),doNewLine);
     env->ReleaseStringUTFChars(plainText, inChars);
     return env->NewStringUTF(out);
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL Java_com_example_encryptutil_MainActivity_base64Decode(
+JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_base64Decode(
         JNIEnv *env,
-        jobject /* this */, jstring encodedText) {
+        jclass /* this */, jstring encodedText) {
     const char *inChars = (env->GetStringUTFChars(encodedText, JNI_FALSE));
     unsigned char *out = b64_decode((const unsigned char *)inChars,strlen(inChars));
     env->ReleaseStringUTFChars(encodedText, inChars);

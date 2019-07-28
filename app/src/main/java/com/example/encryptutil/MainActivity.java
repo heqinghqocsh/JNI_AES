@@ -1,15 +1,14 @@
 package com.example.encryptutil;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.nio.charset.Charset;
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
+public class MainActivity extends AppCompatActivity {
 
     private TextView originalText;
     private TextView decryptText;
@@ -40,37 +39,46 @@ public class MainActivity extends AppCompatActivity {
         decodeText = findViewById(R.id.decode_text);
 
         final StringBuilder plainText = new StringBuilder(10000);
-        for (int i = 0;i<200;i++){
+        for (int i = 0; i < 200; i++) {
             plainText.append(original);
         }
 
-        originalText.setText("原文长度：\n"+plainText.length());
-        final String cipherText = encrypt(plainText.toString());
+        originalText.setText("原文长度：\n" + plainText.length());
+        final String cipherText = Util.encrypt(plainText.toString());
 //        encryptText.setText("密文：\n"+cipherText);
-        final String tmp = decrypt(cipherText);
-        if (tmp.equals(plainText.toString())){
+        final String tmp = Util.decrypt(cipherText);
+        if (tmp.equals(plainText.toString())) {
             decryptText.setText("加解密成功：\n");
-        }else {
+        } else {
             decryptText.setText("加解密失败：\n");
         }
 
-        final String base64 = "http://www漢字12汉字3asdf456中文";
+        final String base64 = "http://www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文";
 
         base64Text.setText(base64);
-        final String encodeStr = base64Encode(base64);
-        encodeText.setText(encodeStr);
-        decodeText.setText(base64Decode(encodeStr));
+
+        /*String CEncodeStr = Util.base64Encode(base64);
+        encodeText.setText(CEncodeStr);
+        decodeText.setText(Util.base64Decode(CEncodeStr));
+        Log.d("Test",CEncodeStr);
+        Log.d("Test",Util.base64Decode(CEncodeStr));
+
+        String javaEncodeStr = javaBase64Encode(base64);
+        Log.d("Test",javaEncodeStr);
+        Log.d("Test",javaBase64Decode(javaEncodeStr));
+
+        Log.d("Test",String.valueOf(CEncodeStr.equals(javaEncodeStr)));
+        Log.d("Test",javaBase64Decode(CEncodeStr));
+        Log.d("Test",Util.base64Decode(javaEncodeStr));*/
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-    public native String encrypt(String plainText);
+    private String javaBase64Encode(String s) {
+        return Base64.encodeToString(s.getBytes(Charset.forName("UTF-8")), Base64.DEFAULT);
+    }
 
-    public native String decrypt(String cipherText);
+    private String javaBase64Decode(String s) {
+        return new String(Base64.decode(s, Base64.DEFAULT));
+    }
 
-    public native String base64Encode(String cipherText);
 
-    public native String base64Decode(String cipherText);
 }

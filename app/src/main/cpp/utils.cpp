@@ -26,6 +26,7 @@ void convertUnCharToStr(char *out, unsigned char *UnChar, size_t ucLen) {
 }
 
 static const char hex_chars[] = "0123456789abcdef";
+static const int hex_chars_length = 16;
 
 void convert_hex(unsigned char *in, size_t len, char *out) {
     int i = 0;
@@ -37,12 +38,12 @@ void convert_hex(unsigned char *in, size_t len, char *out) {
 }
 
 int hexIndex(char c) {
-    const int len = (int) strlen(hex_chars);
-    for (int i = 0; i < len; ++i) {
+    for (int i = 0; i < hex_chars_length; ++i) {
         if (hex_chars[i] == c) {
             return i;
         }
     }
+    return -1;
 }
 
 void hexConvertToUnsignedChar(unsigned char *in, size_t len, unsigned char *out) {

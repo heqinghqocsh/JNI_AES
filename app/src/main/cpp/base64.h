@@ -28,6 +28,11 @@ static const char b64_table[] = {
 
 static const int b64_length = 64;
 
+static const int LINE_GROUPS = 19;
+
+static const char CRLF_CR = '\r';
+static const char CRLF_LF = '\n';
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,19 +41,19 @@ extern "C" {
  * Encode `unsigned char *' source with `size_t' size.
  * Returns a `char *' base64 encoded string.
  */
-char *b64_encode (const unsigned char *, size_t);
+char *b64_encode(const unsigned char *, size_t, bool);
 
 /**
  * Dencode `char *' source with `size_t' size.
  * Returns a `unsigned char *' base64 decoded string.
  */
-unsigned char *b64_decode (const unsigned char *, size_t);
+unsigned char *b64_decode(const unsigned char *, size_t);
 
 /**
  * Dencode `char *' source with `size_t' size.
  * Returns a `unsigned char *' base64 decoded string + size of decoded string.
  */
-unsigned char *b64_decode_ex (const unsigned char *, size_t, size_t *);
+unsigned char *b64_decode_ex(const unsigned char *, size_t, size_t *);
 
 #ifdef __cplusplus
 }
