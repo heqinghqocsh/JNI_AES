@@ -7,10 +7,6 @@
 
 #endif //ENCRYPTUTIL_UTILS_H
 
-void log(const char *tag, const char *content);
-
-void logChar(const char *content);
-
 void convertUnCharToStr(char* str, unsigned char* UnChar, size_t ucLen);
 
 void convert_hex(unsigned char *in, size_t len, char *out);

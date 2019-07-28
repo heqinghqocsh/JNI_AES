@@ -4,18 +4,7 @@
 
 #include <iostream>
 #include <string>
-#include <android/log.h>
 #include "utils.h"
-
-const char *Tag = "Native_Test";
-
-void log(const char *tag, const char *content) {
-    __android_log_print(ANDROID_LOG_ERROR, tag, "%s", content);
-}
-
-void logChar(const char *content) {
-    __android_log_print(ANDROID_LOG_ERROR, Tag, "%s", content);
-}
 
 void convertUnCharToStr(char *out, unsigned char *UnChar, size_t ucLen) {
     size_t i = 0;
@@ -38,12 +27,28 @@ void convert_hex(unsigned char *in, size_t len, char *out) {
 }
 
 int hexIndex(char c) {
-    for (int i = 0; i < hex_chars_length; ++i) {
-        if (hex_chars[i] == c) {
-            return i;
-        }
+    switch (c){
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            return c - '0';
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 'f':
+            return c - 'a' + 10;
+        default:
+            return -1;
     }
-    return -1;
 }
 
 void hexConvertToUnsignedChar(unsigned char *in, size_t len, unsigned char *out) {

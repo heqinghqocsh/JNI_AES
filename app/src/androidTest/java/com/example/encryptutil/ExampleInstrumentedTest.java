@@ -29,17 +29,71 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
+    public void testEncrypt(){
+        final StringBuilder plainText = new StringBuilder(100);
+
+        int i;
+
+        for (int j = 0;j<0;j++){
+            plainText.append(1);
+        }
+        for (i = 0; i < 10000; i++) {
+            plainText.append(1);
+            final String s = plainText.toString();
+            if (!encrypt(s)){
+//                Log.d("Encrypt","失败原文：\n" + s+"---"+s.length());
+                break;
+            }
+        }
+        Log.d("Encrypt","测试成功数据：\n" + i);
+
+        /*final String s = plainText.toString();
+        if (!encrypt(s)){
+            Log.d("Encrypt","失败原文：\n" + s+"---"+s.length());
+        }*/
+    }
+
+    private boolean encrypt(String plainText){
+//        Log.d("Encrypt","原文：\n" + plainText);
+
+        String cipherText = Util.encrypt(plainText);
+
+//        cipherText = cipherText.replace('=', '*');
+//        cipherText = cipherText.replace('+', '$');
+
+//        Log.d("Encrypt","\n密文：\n"+cipherText);
+
+//        cipherText = cipherText.replace('*', '=');
+//        cipherText = cipherText.replace('$', '+');
+
+        final String tmp = Util.decrypt(cipherText);
+
+//        Log.d("Encrypt","\n解密：\n"+tmp);
+
+        final boolean success = tmp.equals(plainText);
+
+        if (success) {
+//            Log.d("Encrypt","\n加解密成功："+plainText);
+        } else {
+            Log.d("Encrypt","\n加解密失败：\n");
+            Log.d("Encrypt","\n明文：\n"+plainText);
+            Log.d("Encrypt","\n密文：\n"+cipherText);
+            Log.d("Encrypt","\n解密：\n"+tmp);
+        }
+        return success;
+    }
+
+
+    @Test
     public void base64() {
         String s = "123456abcdef:\\{\"\"汉字http://.";
         int size = 57;
         final StringBuilder builder = new StringBuilder(10000);
-        final int length = 1000;
+        final int length = 10000;
         for (int i = 0; i < length; i++) {
-            builder.append(s);
+            builder.append(1);
             testBase64(builder.toString());
         }
-//        testBase64(s);
-
         Log.d("base64", "测试完成--" + length);
     }
 

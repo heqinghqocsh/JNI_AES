@@ -79,8 +79,8 @@ char *b64_encode(const unsigned char *src, size_t len, bool do_newline) {
     return enc;
 }
 
-unsigned char *b64_decode(const unsigned char *src, size_t len) {
-    return b64_decode_ex(src, len, NULL);
+unsigned char *b64_decode(const unsigned char *src, size_t base64_len,size_t *dec_size) {
+    return b64_decode_ex(src, base64_len, dec_size);
 }
 
 void deal_decode(unsigned char tmp[], unsigned char buf[]) {
@@ -165,7 +165,7 @@ int b64_table_index(unsigned char c) {
     }
 }
 
-unsigned char *b64_decode_ex(const unsigned char *src, size_t len, size_t *decsize) {
+unsigned char *b64_decode_ex(const unsigned char *src, size_t len, size_t *dec_size) {
     int i = 0;
     int j = 0;
     size_t size = 0;
@@ -233,8 +233,8 @@ unsigned char *b64_decode_ex(const unsigned char *src, size_t len, size_t *decsi
     dec = (unsigned char *) realloc(dec, size + 1);
     dec[size] = '\0';
     // Return back the size of decoded string if demanded.
-    if (decsize != NULL) {
-        *decsize = size;
+    if (dec_size != NULL) {
+        *dec_size = size;
     }
     return dec;
 }

@@ -6,7 +6,7 @@
 #include <string>
 #include "aes.h"
 #include "modes.h"
-#include <android/log.h>
+#include "log.h"
 #include "utils.h"
 #include "base64.h"
 
@@ -44,19 +44,22 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
         jclass /* this */, jstring plainText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
     AES_set_encrypt_key(password, 128, aes_key);
-
     const char *inChars = (env->GetStringUTFChars(plainText, JNI_FALSE));
     const size_t originalLength = strlen(inChars);
     size_t paddedLength = 0;
-    unsigned char *in;
-    in = padding_buf(inChars, originalLength, &paddedLength);
+    unsigned char *in = padding_buf(inChars, originalLength, &paddedLength);
     env->ReleaseStringUTFChars(plainText, inChars);
     unsigned char *out = (unsigned char *) malloc((paddedLength) * sizeof(unsigned char));
     int num = 0;
     AES_cfb8_encrypt(in, out, paddedLength, aes_key, getIv(), &num, AES_ENCRYPT);
     free(in);
-    char *result = (char *) malloc((paddedLength * 2 + 1) * sizeof(char));
+    free(aes_key);
+    /*
+     * //十六进制字符串转换
+     * char *result = (char *) malloc((paddedLength * 2 + 1) * sizeof(char));
     convert_hex(out, paddedLength, result);
+     */
+    const char *result = b64_encode(out,paddedLength, true);
     free(out);
     return env->NewStringUTF(result);
 }
@@ -67,19 +70,22 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
         jclass /* this */, jstring encryptText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
     AES_set_encrypt_key(password, 128, aes_key);
-
     const char *inChars = (env->GetStringUTFChars(encryptText, JNI_FALSE));
-    const size_t originalLength = strlen(inChars);
-    const size_t outPaddedLength = originalLength / 2;
-    unsigned char *in = (unsigned char *) malloc(
+    size_t originalLength = 0;
+    unsigned char *in = b64_decode((const unsigned char *)inChars,strlen(inChars),&originalLength);
+    env->ReleaseStringUTFChars(encryptText, inChars);
+    const size_t outPaddedLength = originalLength;
+    /*
+     * //十六进制字符串转换
+     * unsigned char *in = (unsigned char *) malloc(
             (outPaddedLength + 1) * sizeof(unsigned char));
     hexConvertToUnsignedChar((unsigned char *) inChars, outPaddedLength, in);
-    env->ReleaseStringUTFChars(encryptText, inChars);
-
+     */
     unsigned char *out = (unsigned char *) malloc((outPaddedLength) * sizeof(unsigned char));
     int num = 0;
     AES_cfb8_encrypt(in, out, outPaddedLength, aes_key, getIv(), &num, AES_DECRYPT);
     free(in);
+    free(aes_key);
     const int pad = (int)out[outPaddedLength - 1];
     out[outPaddedLength - pad] = '\0';
     return env->NewStringUTF((char *) out);
@@ -100,7 +106,8 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_base64Decode(
         JNIEnv *env,
         jclass /* this */, jstring encodedText) {
     const char *inChars = (env->GetStringUTFChars(encodedText, JNI_FALSE));
-    unsigned char *out = b64_decode((const unsigned char *)inChars,strlen(inChars));
+    size_t originalLength = 0;
+    unsigned char *out = b64_decode((const unsigned char *)inChars,strlen(inChars),&originalLength);
     env->ReleaseStringUTFChars(encodedText, inChars);
     return env->NewStringUTF((char *)out);
 }

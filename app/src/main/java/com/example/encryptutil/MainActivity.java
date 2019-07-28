@@ -11,11 +11,6 @@ import java.nio.charset.Charset;
 public class MainActivity extends AppCompatActivity {
 
     private TextView originalText;
-    private TextView decryptText;
-
-    private TextView base64Text;
-    private TextView encodeText;
-    private TextView decodeText;
 
     final String original = "abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
             "234567890,./最棒abcdefg1234567890拉酒店方垃圾死了打飞机1234567$%*8啊啊大所发生的901" +
@@ -32,30 +27,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         originalText = findViewById(R.id.original_text);
-        decryptText = findViewById(R.id.decrypt_text);
 
-        base64Text = findViewById(R.id.base64_text);
-        encodeText = findViewById(R.id.encode_text);
-        decodeText = findViewById(R.id.decode_text);
-
-        final StringBuilder plainText = new StringBuilder(10000);
-        for (int i = 0; i < 200; i++) {
-            plainText.append(original);
+        final StringBuilder plainText = new StringBuilder(100);
+        for (int i = 0; i < 78; i++) {
+//            plainText.append(original);
+            plainText.append(1);
         }
+//        plainText.append(1);
 
-        originalText.setText("原文长度：\n" + plainText.length());
-        final String cipherText = Util.encrypt(plainText.toString());
-//        encryptText.setText("密文：\n"+cipherText);
+        originalText.setText("原文：\n" + plainText.toString());
+
+        String cipherText = Util.encrypt(plainText.toString());
+
+        cipherText = cipherText.replace('=', '*');
+        cipherText = cipherText.replace('+', '$');
+
+        originalText.append("\n密文：\n"+cipherText);
+
+        cipherText = cipherText.replace('*', '=');
+        cipherText = cipherText.replace('$', '+');
+
         final String tmp = Util.decrypt(cipherText);
+
+        originalText.append("\n解密：\n"+tmp);
+
         if (tmp.equals(plainText.toString())) {
-            decryptText.setText("加解密成功：\n");
+            originalText.append("\n加解密成功：\n");
         } else {
-            decryptText.setText("加解密失败：\n");
+            originalText.append("\n加解密失败：\n");
         }
 
-        final String base64 = "http://www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文";
-
-        base64Text.setText(base64);
+//        final String base64 = "http://www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文www漢字12汉字3asdf456中文";
+//
+//        base64Text.setText(base64);
 
         /*String CEncodeStr = Util.base64Encode(base64);
         encodeText.setText(CEncodeStr);

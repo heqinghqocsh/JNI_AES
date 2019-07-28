@@ -17,7 +17,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        encrypt.cpp aes_core.c cfb128.c aes_cfb.c utils.cpp base64.cpp)
+        encrypt.cpp aes_core.c cfb128.c aes_cfb.c utils.cpp base64.cpp log.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by

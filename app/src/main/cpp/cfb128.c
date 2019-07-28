@@ -9,7 +9,6 @@
 
 #include <string.h>
 #include "modes.h"
-#include <android/log.h>
 
 /*
  * The input and output encrypted as though 128bit cfb mode is being used.
@@ -192,7 +191,7 @@ void CRYPTO_cfb128_8_encrypt(const unsigned char *in, unsigned char *out,
                              int enc, block128_f block)
 {
     size_t n;
-
-    for (n = 0; n < length; ++n)
+    for (n = 0; n < length; ++n){
         cfbr_encrypt_block(&in[n], &out[n], 8, key, ivec, enc, block);
+    }
 }
