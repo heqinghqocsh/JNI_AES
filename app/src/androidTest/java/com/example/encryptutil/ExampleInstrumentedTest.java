@@ -22,31 +22,27 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         assertEquals("com.example.encryptutil", appContext.getPackageName());
     }
 
     @Test
     public void testEncrypt(){
-        final StringBuilder plainText = new StringBuilder(100);
-
+        final String s = "1234按实际冷风机cdef:\\{\"\"汉字http://.";
+        final StringBuilder plainText = new StringBuilder(10000);
         int i;
-
-        for (int j = 0;j<0;j++){
-            plainText.append(1);
+        for (i = 0; i < 1000; i++) {
+            plainText.append(s);
         }
-        for (i = 0; i < 10000; i++) {
-            plainText.append(1);
-            final String s = plainText.toString();
-            if (!encrypt(s)){
-//                Log.d("Encrypt","失败原文：\n" + s+"---"+s.length());
+        for (i = 0; i < 3500; i++) {
+            plainText.append(s);
+            String str = plainText.toString();
+            if (!encrypt(str)){
+                Log.d("Encrypt","失败原文：\n" + str+"---"+str.length());
                 break;
             }
         }
         Log.d("Encrypt","测试成功数据：\n" + i);
-
         /*final String s = plainText.toString();
         if (!encrypt(s)){
             Log.d("Encrypt","失败原文：\n" + s+"---"+s.length());
@@ -60,9 +56,7 @@ public class ExampleInstrumentedTest {
 
 //        cipherText = cipherText.replace('=', '*');
 //        cipherText = cipherText.replace('+', '$');
-
 //        Log.d("Encrypt","\n密文：\n"+cipherText);
-
 //        cipherText = cipherText.replace('*', '=');
 //        cipherText = cipherText.replace('$', '+');
 
@@ -83,23 +77,19 @@ public class ExampleInstrumentedTest {
         return success;
     }
 
-
     @Test
     public void base64() {
-        String s = "123456abcdef:\\{\"\"汉字http://.";
-        int size = 57;
+        final String s = "123456abcdef:\\{\"\"汉字http://.";
         final StringBuilder builder = new StringBuilder(10000);
         final int length = 10000;
         for (int i = 0; i < length; i++) {
-            builder.append(1);
+            builder.append(s);
             testBase64(builder.toString());
         }
         Log.d("base64", "测试完成--" + length);
     }
 
     private void testBase64(String s) {
-//        Log.d("base64","------------------------------------------------");
-//        Log.d("base64",s);
         String encodeJ = javaBase64Encode(s);
         String decodeJ = javaBase64Decode(encodeJ);
 //        Log.d("base64_java_e",encodeJ);
