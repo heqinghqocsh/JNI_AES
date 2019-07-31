@@ -31,10 +31,10 @@ public class ExampleInstrumentedTest {
         final String s = "1234按实际冷风机cdef:\\{\"\"汉字http://.";
         final StringBuilder plainText = new StringBuilder(10000);
         int i;
-        for (i = 0; i < 1000; i++) {
+        /*for (i = 0; i < 1000; i++) {
             plainText.append(s);
-        }
-        for (i = 0; i < 3500; i++) {
+        }*/
+        for (i = 0; i < 5000; i++) {
             plainText.append(s);
             String str = plainText.toString();
             if (!encrypt(str)){

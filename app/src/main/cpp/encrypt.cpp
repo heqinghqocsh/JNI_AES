@@ -59,9 +59,11 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
      * char *result = (char *) malloc((paddedLength * 2 + 1) * sizeof(char));
     convert_hex(out, paddedLength, result);
      */
-    const char *result = b64_encode(out,paddedLength, true);
+    char *result = b64_encode(out,paddedLength, true);
     free(out);
-    return env->NewStringUTF(result);
+    jstring tmp = env->NewStringUTF(result);
+    free(result);
+    return tmp;
 }
 
 extern "C"
@@ -88,7 +90,9 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
     free(aes_key);
     const int pad = (int)out[outPaddedLength - 1];
     out[outPaddedLength - pad] = '\0';
-    return env->NewStringUTF((char *) out);
+    jstring tmp = env->NewStringUTF((char *) out);
+    free(out);
+    return tmp;
 }
 
 extern "C"
@@ -96,9 +100,11 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_base64Encode(
         JNIEnv *env,
         jclass /* this */, jstring plainText,jboolean doNewLine) {
     const char *inChars = (env->GetStringUTFChars(plainText, JNI_FALSE));
-    const char *out = b64_encode((const unsigned char *)inChars,strlen(inChars),doNewLine);
+    char *out = b64_encode((const unsigned char *)inChars,strlen(inChars),doNewLine);
     env->ReleaseStringUTFChars(plainText, inChars);
-    return env->NewStringUTF(out);
+    jstring tmp = env->NewStringUTF(out);
+    free(out);
+    return tmp;
 }
 
 extern "C"
@@ -109,5 +115,7 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_base64Decode(
     size_t originalLength = 0;
     unsigned char *out = b64_decode((const unsigned char *)inChars,strlen(inChars),&originalLength);
     env->ReleaseStringUTFChars(encodedText, inChars);
-    return env->NewStringUTF((char *)out);
+    jstring tmp = env->NewStringUTF((char *)out);
+    free(out);
+    return tmp;
 }
