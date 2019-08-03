@@ -28,8 +28,9 @@ unsigned char *padding_buf(const char *buf, size_t size, size_t *final_size) {
     return ret;
 }
 
-unsigned const char password[] = "aaaaaaaaaaaaaaaa";
-unsigned char iv[] = "0123456789abcdef";
+unsigned const char password[] = "yn!d!c@p$abw0rdacbttye$15649!@$@";
+const int pwdBitsLength = 256;
+unsigned char iv[] = "-o&g@n,%o!dl^abc";
 
 unsigned char *getIv() {
     size_t len = strlen((char *) iv);
@@ -43,7 +44,7 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
         JNIEnv *env,
         jclass /* this */, jstring plainText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
-    AES_set_encrypt_key(password, 128, aes_key);
+    AES_set_encrypt_key(password, pwdBitsLength, aes_key);
     const char *inChars = (env->GetStringUTFChars(plainText, JNI_FALSE));
     const size_t originalLength = strlen(inChars);
     size_t paddedLength = 0;
@@ -51,7 +52,7 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
     env->ReleaseStringUTFChars(plainText, inChars);
     unsigned char *out = (unsigned char *) malloc((paddedLength) * sizeof(unsigned char));
     int num = 0;
-    AES_cfb8_encrypt(in, out, paddedLength, aes_key, getIv(), &num, AES_ENCRYPT);
+    AES_cfb128_encrypt(in, out, paddedLength, aes_key, getIv(), &num, AES_ENCRYPT);
     free(in);
     free(aes_key);
     /*
@@ -71,7 +72,7 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
         JNIEnv *env,
         jclass /* this */, jstring encryptText) {
     AES_KEY *aes_key = (AES_KEY *) malloc(sizeof(AES_KEY));
-    AES_set_encrypt_key(password, 128, aes_key);
+    AES_set_encrypt_key(password, pwdBitsLength, aes_key);
     const char *inChars = (env->GetStringUTFChars(encryptText, JNI_FALSE));
     size_t originalLength = 0;
     unsigned char *in = b64_decode((const unsigned char *)inChars,strlen(inChars),&originalLength);
@@ -85,7 +86,7 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
      */
     unsigned char *out = (unsigned char *) malloc((outPaddedLength) * sizeof(unsigned char));
     int num = 0;
-    AES_cfb8_encrypt(in, out, outPaddedLength, aes_key, getIv(), &num, AES_DECRYPT);
+    AES_cfb128_encrypt(in, out, outPaddedLength, aes_key, getIv(), &num, AES_DECRYPT);
     free(in);
     free(aes_key);
     const int pad = (int)out[outPaddedLength - 1];

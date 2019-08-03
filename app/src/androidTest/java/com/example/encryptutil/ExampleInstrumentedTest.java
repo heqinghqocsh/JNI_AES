@@ -9,6 +9,7 @@ import android.util.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import static org.junit.Assert.*;
@@ -28,13 +29,14 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testEncrypt(){
-        final String s = "1234按实际冷风机cdef:\\{\"\"汉字http://.";
+//        final String s = "1234按实际冷风机cdef:\\{\"\"汉字http://.";
+        final String s = "1";
         final StringBuilder plainText = new StringBuilder(10000);
         int i;
-        /*for (i = 0; i < 1000; i++) {
-            plainText.append(s);
-        }*/
         for (i = 0; i < 5000; i++) {
+            plainText.append(s);
+        }
+        for (i = 0; i < 10; i++) {
             plainText.append(s);
             String str = plainText.toString();
             if (!encrypt(str)){
@@ -43,31 +45,32 @@ public class ExampleInstrumentedTest {
             }
         }
         Log.d("Encrypt","测试成功数据：\n" + i);
-        /*final String s = plainText.toString();
-        if (!encrypt(s)){
-            Log.d("Encrypt","失败原文：\n" + s+"---"+s.length());
-        }*/
     }
 
     private boolean encrypt(String plainText){
 //        Log.d("Encrypt","原文：\n" + plainText);
 
-        String cipherText = Util.encrypt(plainText);
+        //java加解密------------------------------------------------------
+        try {
+            String javaE = AESEncrypt.encodeReplace(plainText);
+//            Log.d("Encrypt","java加密：\n" + javaE);
+            String javaD = AESEncrypt.decodeReplace(javaE);
+//            Log.d("Encrypt","java解密：\n" + javaD);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
+        String cipherText = Util.encrypt(plainText);
 //        cipherText = cipherText.replace('=', '*');
 //        cipherText = cipherText.replace('+', '$');
 //        Log.d("Encrypt","\n密文：\n"+cipherText);
 //        cipherText = cipherText.replace('*', '=');
 //        cipherText = cipherText.replace('$', '+');
-
         final String tmp = Util.decrypt(cipherText);
 
-//        Log.d("Encrypt","\n解密：\n"+tmp);
-
         final boolean success = tmp.equals(plainText);
-
         if (success) {
-//            Log.d("Encrypt","\n加解密成功："+plainText);
+            Log.d("Encrypt","\n加解密成功："+plainText);
         } else {
             Log.d("Encrypt","\n加解密失败：\n");
             Log.d("Encrypt","\n明文：\n"+plainText);
