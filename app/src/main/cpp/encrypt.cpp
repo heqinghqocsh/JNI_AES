@@ -34,7 +34,7 @@ unsigned char iv[] = "-o&g@n,%o!dl^abc";
 
 unsigned char *getIv() {
     size_t len = strlen((char *) iv);
-    unsigned char *ivCopy = (unsigned char *) malloc(len);;
+    unsigned char *ivCopy = (unsigned char *) malloc(len);
     memcpy(ivCopy, iv, len);
     return ivCopy;
 }
@@ -52,8 +52,10 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_encrypt(
     env->ReleaseStringUTFChars(plainText, inChars);
     unsigned char *out = (unsigned char *) malloc((paddedLength) * sizeof(unsigned char));
     int num = 0;
-    AES_cfb128_encrypt(in, out, paddedLength, aes_key, getIv(), &num, AES_ENCRYPT);
+    unsigned char *iv = getIv();
+    AES_cfb128_encrypt(in, out, paddedLength, aes_key, iv, &num, AES_ENCRYPT);
     free(in);
+    free(iv);
     free(aes_key);
     /*
      * //十六进制字符串转换
@@ -86,9 +88,11 @@ JNIEXPORT jstring JNICALL Java_com_example_encryptutil_Util_decrypt(
      */
     unsigned char *out = (unsigned char *) malloc((outPaddedLength) * sizeof(unsigned char));
     int num = 0;
-    AES_cfb128_encrypt(in, out, outPaddedLength, aes_key, getIv(), &num, AES_DECRYPT);
+    unsigned char *iv = getIv();
+    AES_cfb128_encrypt(in, out, outPaddedLength, aes_key, iv, &num, AES_DECRYPT);
     free(in);
     free(aes_key);
+    free(iv);
     const int pad = (int)out[outPaddedLength - 1];
     out[outPaddedLength - pad] = '\0';
     jstring tmp = env->NewStringUTF((char *) out);

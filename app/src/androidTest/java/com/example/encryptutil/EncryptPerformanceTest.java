@@ -26,10 +26,10 @@ public class EncryptPerformanceTest {
         final String s = "{type:1,name:\"bob;:&#$\\\",function:\"加解密对比\",url:\"https://www.baidu.com/\"}";
         final StringBuilder plainText = new StringBuilder(10000);
         int i;
-        for (i = 0; i < 5000; i++) {
+        for (i = 0; i < 1000; i++) {
             plainText.append(s);
         }
-        for (i = 0; i < 50; i++) {
+        for (i = 0; i < 500; i++) {
             plainText.append(s);
             final String str = plainText.toString();
             if (!encrypt(str)) {
